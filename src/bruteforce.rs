@@ -1,7 +1,5 @@
 pub mod utils;
 
-use rand::Rng;
-
 pub struct Bruteforce {
     debug: bool,
 }
@@ -39,18 +37,7 @@ impl Bruteforce {
         return Some(vec);
     }
 
-    // thanks https://stackoverflow.com/questions/59206653/how-to-calculate-21-factorial-in-rust
-    fn factorial (&self, input: u64) -> u64 {
-        return (1..=input).product();
-    }
-
-    // thanks https://stackoverflow.com/questions/65561566/number-of-combinations-permutations
-    pub fn get_permutation_count (&self, vec: &Vec<char>) -> u64 {
-        let n: u64 = vec.len() as u64;
-        return (n - n + 1..=n).product();
-    }
-
-    fn get_combos (&self, combos: Vec<u64>) -> u64 {
+    pub fn get_combos (&self, combos: Vec<u64>) -> Vec<u64> {
         match combos.len() {
             4 => {
                 return self.combos_len_4(combos);
@@ -62,18 +49,58 @@ impl Bruteforce {
                 todo!();
             }
             1 => {
-                return combos[0]
+                todo!();
             }
             _ => panic!("Check get_combos...")
         }
     }
 
-    fn combos_len_4 (&self, combos: Vec<u64>) -> u64 {
+    fn combos_len_4 (&self, combos: Vec<u64>) -> Vec<u64> {
+        // next stores newly generated unique vectors of u64 for easy comparisons
+        // buffer stores new digit to either discard or push into next
+        // result stores unique values
+        let mut next: Vec<u64> = Vec::new();
+        let mut buffer: u64;
+        let mut result: Vec<u64> = Vec::new();
 
-        // recursive function
-        todo!();
+        // while we haven't generated all 24 unique digits
+        while result.len() != 24 {
 
-        return 1231
+            // while we haven't matched our desired length, generate a new integer 
+            // and push it to the back of our new vector we want to add
+            while next.len() != 4 {
+                if self.debug {println!("Next Length {}", &next.len());}
+
+                // generate new buffer, check if it is already within the new vector
+                buffer = utils::gen_next(&combos);
+                if self.debug {println!("Buffer -> {}", &buffer)}
+                if next.contains(&buffer) {
+                    continue;
+                }
+                // if it isn't, add it to our stack
+                else {
+                    next.push(buffer);
+                }
+            }
+
+            if self.debug {println!("[!] Next length is now 4, comparing.")}
+
+            // stupid variable name contains next 4 digit integer to compare
+            let geeking: u64 = utils::concat(&next);
+
+            if result.contains(&geeking) {
+                next.clear();
+
+                if self.debug {println!("Non-unique result *{}* in *{:?}*", geeking, &result)}
+                utils::sleep(1);
+                continue;
+            }
+            else {
+                result.push(geeking);
+            }
+        }
+
+        result.sort();
+        return result;
     }
-
 }
