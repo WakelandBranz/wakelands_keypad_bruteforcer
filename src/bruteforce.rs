@@ -11,33 +11,7 @@ impl Bruteforce {
         }
     } 
 
-    // gets user input, returns trimmed user input with length, none is a simple error
-    pub fn get_user_input (&self) -> Option<Vec<char>> {
-        let mut user_input: String = String::new(); // stores input once acquired in input_size
-        std::io::stdin() // read input
-            .read_line(&mut user_input)
-            .expect("Failed to read line");
-
-        // remove whitespaces and other unnecessary stuff, please let me know if there is a better way to do this
-        let user_input: String = user_input.replace(" ", "",).replace("\n", "").replace("\r", "");
-
-        // if user input is empty
-        if user_input == "" {
-            if self.debug {println!("[!] Empty String")}
-            return None;
-        }
-        // if greater than maximum allowed amount of integers
-        if user_input.chars().count() > 4 { 
-            if self.debug {println!("[!] String size exceeds limit, length -> {}", user_input.chars().count())}
-            return None;
-        }
-
-        let vec: Vec<char> = user_input.chars().collect();
-
-        return Some(vec);
-    }
-
-    pub fn get_combos (&self, combos: Vec<u64>) -> Vec<u64> {
+    pub fn get_combos (&self, combos: Vec<u64>) -> Option<Vec<u64>> {
         match combos.len() {
             4 => {
                 return self.combos_len_4(combos);
@@ -55,7 +29,13 @@ impl Bruteforce {
         }
     }
 
-    fn combos_len_4 (&self, combos: Vec<u64>) -> Vec<u64> {
+    fn combos_len_4 (&self, combos: Vec<u64>) -> Option<Vec<u64>> {
+        // check for repeating digits
+        if utils::contains_repeating_digits(&combos) {
+            println!("[!] Your input is 4 digits long and contains repeating digits.  Please reinput a valid combination of characters.");
+            return None;
+        }
+
         // next stores newly generated unique vectors of u64 for easy comparisons
         // buffer stores new digit to either discard or push into next
         // result stores unique values
@@ -91,8 +71,7 @@ impl Bruteforce {
             if result.contains(&geeking) {
                 next.clear();
 
-                if self.debug {println!("Non-unique result *{}* in *{:?}*", geeking, &result)}
-                utils::sleep(1);
+                if self.debug {println!("Non-unique result *{}* in *{:?}*", geeking, &result);}
                 continue;
             }
             else {
@@ -100,7 +79,7 @@ impl Bruteforce {
             }
         }
 
-        result.sort();
-        return result;
+        result.sort_unstable();
+        return Some(result);
     }
 }

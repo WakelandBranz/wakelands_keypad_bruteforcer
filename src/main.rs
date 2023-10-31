@@ -4,7 +4,7 @@ use crate::bruteforce::*; // Bring Bruteforce into scope
 
 fn main() {
     // DEBUG VARIABLE
-    let debug: bool = true;
+    let debug: bool = false;
     let completed: bool = false;
 
     let bf: Bruteforce = Bruteforce::new(debug);
@@ -14,7 +14,7 @@ fn main() {
     while !completed {
         println!("Please input the digits you have found on the keypad.");
 
-        let input: Vec<char> = match bf.get_user_input() {
+        let input: Vec<char> = match utils::get_user_input() {
             Some(res) => res,
             None => {
                 println!("[-] Invalid code input, please try again.");
@@ -23,7 +23,7 @@ fn main() {
         };
 
 
-        let numbers = utils::v_from_char_to_int(&input);
+        let numbers = utils::convert_chars_to_u64(&input);
         println!("Input -> {:?}", &numbers);
         utils::sleep(500);
             
@@ -33,7 +33,7 @@ fn main() {
         
 
         println!("Possible combination count -> {}", combination_count);
-        println!("Combinations -> {:?}", &combinations);
+        println!("Combinations -> {:?}", &combinations.unwrap());
     }
 
 }
