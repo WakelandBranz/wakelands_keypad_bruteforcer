@@ -1,10 +1,10 @@
 mod bruteforce;
 
-use crate::bruteforce::Bruteforce; // Bring Bruteforce into scope
+use crate::bruteforce::*; // Bring Bruteforce into scope
 
 fn main() {
     // DEBUG VARIABLE
-    let debug: bool = false;
+    let debug: bool = true;
     let completed: bool = false;
 
     let bf: Bruteforce = Bruteforce::new(debug);
@@ -26,11 +26,14 @@ fn main() {
         let input_s: String = input.iter().collect();
         println!("Input -> {}", &input_s);
 
-        let combinations = bf.get_combinations(&input);
+        let numbers = utils::v_from_char_to_int(&input);
 
+        let combination_count = bf.get_permutation_count(&input);
+        let combinations = todo!();
+        
+
+        println!("Possible combination count -> {}", combination_count);
         println!("Combinations -> {:?}", &combinations);
     }
 
-    
-    
 }

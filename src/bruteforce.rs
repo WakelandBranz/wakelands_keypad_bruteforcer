@@ -1,18 +1,22 @@
+pub mod utils;
+
+use rand::Rng;
+
 pub struct Bruteforce {
-    debug: bool
+    debug: bool,
 }
 
 impl Bruteforce {
     pub fn new (is_debugging: bool) -> Self {
         Self {
-            debug: is_debugging
+            debug: is_debugging,
         }
     } 
 
     // gets user input, returns trimmed user input with length, none is a simple error
     pub fn get_user_input (&self) -> Option<Vec<char>> {
         let mut user_input: String = String::new(); // stores input once acquired in input_size
-        let input_size: usize = std::io::stdin() // read input
+        std::io::stdin() // read input
             .read_line(&mut user_input)
             .expect("Failed to read line");
 
@@ -30,51 +34,46 @@ impl Bruteforce {
             return None;
         }
 
-        let mut vec: Vec<char> = user_input.chars().collect();
+        let vec: Vec<char> = user_input.chars().collect();
 
         return Some(vec);
     }
 
-    pub fn get_combinations (&self, vec: &Vec<char>) -> Vec<String> {
-        let mut result: Vec<String> = Vec::new();
-        let mut stack: Vec<char> = Vec::with_capacity(4);
-        
-        // iterate through first number
-        for i in 0..vec.len() {
-            // push first number to end
-            stack.push(vec[i]);
-
-            if stack.len() == 4 {
-                // turns all chars into a string and collects them into one string.
-                let combo = stack.iter().map(|n| n.to_string()).collect::<String>();
-
-                // ensure value doesn't already exist
-                if !result.contains(&combo) {
-                    result.push(combo);
-                }
-            }
-            else {
-                for j in (i + 1)..vec.len() {
-                    stack.push(vec[j]);
-
-                    if stack.len() == 4 {
-                        // turns all chars into a string and collects them into one string.
-                        let combo = stack.iter().map(|n| n.to_string()).collect::<String>();
-        
-                        // ensure value doesn't already exist
-                        if !result.contains(&combo) {
-                            result.push(combo);
-                        }
-                    }
-
-                    stack.pop();
-                }
-            }
-            stack.pop();
-
-            println!("Iteration {} complete, result -> {:?}", &i, &result);
-        } 
-
-        return result;
+    // thanks https://stackoverflow.com/questions/59206653/how-to-calculate-21-factorial-in-rust
+    fn factorial (&self, input: u64) -> u64 {
+        return (1..=input).product();
     }
+
+    // thanks https://stackoverflow.com/questions/65561566/number-of-combinations-permutations
+    pub fn get_permutation_count (&self, vec: &Vec<char>) -> u64 {
+        let n: u64 = vec.len() as u64;
+        return (n - n + 1..=n).product();
+    }
+
+    fn get_combos (&self, combos: Vec<u64>) -> u64 {
+        match combos.len() {
+            4 => {
+                return self.combos_len_4(combos);
+            }
+            3 => {
+                todo!();
+            }
+            2 => {
+                todo!();
+            }
+            1 => {
+                return combos[0]
+            }
+            _ => panic!("Check get_combos...")
+        }
+    }
+
+    fn combos_len_4 (&self, combos: Vec<u64>) -> u64 {
+
+        // recursive function
+        todo!();
+
+        return 1231
+    }
+
 }
