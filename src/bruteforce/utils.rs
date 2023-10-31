@@ -27,6 +27,7 @@ pub fn get_user_input () -> Option<Vec<char>> {
     // this is a check if the input is 4 characters wide and there are repeating digits
     // that would be an illegal scenario
     if vec.len() == 4 && contains_repeating_digits(&convert_chars_to_u64(&vec)) {
+        println!("[!] Repeating digits within a 4 digit code, impossible scenario");
         return None;
     }
 

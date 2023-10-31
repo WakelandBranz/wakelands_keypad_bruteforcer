@@ -30,12 +30,6 @@ impl Bruteforce {
     }
 
     fn combos_len_4 (&self, combos: Vec<u64>) -> Option<Vec<u64>> {
-        // check for repeating digits
-        if utils::contains_repeating_digits(&combos) {
-            println!("[!] Your input is 4 digits long and contains repeating digits.  Please reinput a valid combination of characters.");
-            return None;
-        }
-
         // next stores newly generated unique vectors of u64 for easy comparisons
         // buffer stores new digit to either discard or push into next
         // result stores unique values
