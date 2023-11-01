@@ -64,10 +64,11 @@ impl Bruteforce {
             if result.contains(&combination) {
                 next.clear();
 
-                if self.debug {println!("Non-unique result *{}* in *{:?}*", combination, &result);}
+                if self.debug {println!("[-] Non-unique result *{}* in *{:?}*", combination, &result);}
                 continue;
             }
             else {
+                if self.debug {println!("[+] Unique result *{}* in *{:?}*", combination, &result);}
                 result.push(combination);
             }
         }

@@ -4,7 +4,7 @@ use crate::bruteforce::*; // Bring Bruteforce into scope
 
 fn main() {
     // DEBUG VARIABLE
-    let debug: bool = false;
+    let debug: bool = true;
     let completed: bool = false; // function to be implemented in the future
 
     let bf: Bruteforce = Bruteforce::new(debug);

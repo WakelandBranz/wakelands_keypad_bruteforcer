@@ -89,3 +89,7 @@ pub fn contains_repeating_digits (input: &Vec<u64>) -> bool {
     }
     return true;
 }
+
+pub fn count_repeating_digits (input: &Vec<u64>) -> u64 {
+    todo!();
+}
