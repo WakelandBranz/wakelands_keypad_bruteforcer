@@ -37,17 +37,18 @@ impl Bruteforce {
         let mut buffer: u64;
         let mut result: Vec<u64> = Vec::new();
 
+        let mut total_iterations: u32 = 0;
+
         // while we haven't generated all 24 unique digits
         while result.len() != 24 {
+
+            total_iterations += 1;
 
             // while we haven't matched our desired length, generate a new integer 
             // and push it to the back of our new vector we want to add
             while next.len() != 4 {
-                if self.debug {println!("Next Length {}", &next.len());}
-
                 // generate new buffer, check if it is already within the new vector
                 buffer = utils::gen_next(&combos);
-                if self.debug {println!("Buffer -> {}", &buffer)}
                 if next.contains(&buffer) {
                     continue;
                 }
@@ -57,21 +58,21 @@ impl Bruteforce {
                 }
             }
 
-            if self.debug {println!("[!] Next length is now 4, comparing.")}
+            // contains next 4 digit integer to compare
+            let combination: u64 = utils::concat(&next);
 
-            // stupid variable name contains next 4 digit integer to compare
-            let geeking: u64 = utils::concat(&next);
-
-            if result.contains(&geeking) {
+            if result.contains(&combination) {
                 next.clear();
 
-                if self.debug {println!("Non-unique result *{}* in *{:?}*", geeking, &result);}
+                if self.debug {println!("Non-unique result *{}* in *{:?}*", combination, &result);}
                 continue;
             }
             else {
-                result.push(geeking);
+                result.push(combination);
             }
         }
+
+        if self.debug {println!("[!] Found result after {} iterations!", total_iterations)}
 
         result.sort_unstable();
         return Some(result);

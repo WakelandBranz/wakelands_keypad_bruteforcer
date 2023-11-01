@@ -45,6 +45,7 @@ pub fn convert_chars_to_u64 (input: &Vec<char>) -> Vec<u64> {
     .collect();
 }
 
+// generates the next digit to be compared based on a vector of u64s
 pub fn gen_next (available: &Vec<u64>) -> u64 {
     let mut rng = rand::thread_rng();
     return available[rng.gen_range(0..available.len())];

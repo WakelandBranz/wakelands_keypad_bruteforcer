@@ -5,7 +5,7 @@ use crate::bruteforce::*; // Bring Bruteforce into scope
 fn main() {
     // DEBUG VARIABLE
     let debug: bool = false;
-    let completed: bool = false;
+    let completed: bool = false; // function to be implemented in the future
 
     let bf: Bruteforce = Bruteforce::new(debug);
 
@@ -24,7 +24,7 @@ fn main() {
 
 
         let numbers = utils::convert_chars_to_u64(&input);
-        println!("Input -> {:?}", &numbers);
+        if debug {println!("Input -> {:?}", &numbers)}
         utils::sleep(500);
             
 
