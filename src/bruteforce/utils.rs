@@ -26,7 +26,7 @@ pub fn get_user_input () -> Option<Vec<char>> {
 
     // this is a check if the input is 4 characters wide and there are repeating digits
     // that would be an illegal scenario
-    if vec.len() == 4 && contains_repeating_digits(&convert_chars_to_u64(&vec)) {
+    if vec.len() == 4 && contains_repeating_digits(&convert_char_to_u64(&vec)) {
         println!("[!] Repeating digits within a 4 digit code, impossible scenario");
         return None;
     }
@@ -34,14 +34,36 @@ pub fn get_user_input () -> Option<Vec<char>> {
     return Some(vec);
 }
 
-// vector from chars to ints
-// takes each char in a vector of chars, iterates
-// through them, maps each char and sets char to what it
-// actually represents as a u64
-pub fn convert_chars_to_u64 (input: &Vec<char>) -> Vec<u64> {
+// iterates over each char and turns it into a u64 using map
+pub fn convert_char_to_u64 (input: &Vec<char>) -> Vec<u64> {
     return input
     .iter()
-    .map(|c| c.to_digit(10).unwrap() as u64)
+    .map(|c| c.to_digit(10).unwrap()  as u64) // 
+    .collect();
+}
+
+// iterates over each char and turns it into a u64 using map
+// MUST CONSIST OF CHARS THAT CAN BE CONVERTED TO AN UNSIGNED INTEGER NATURALLY
+pub fn convert_char_to_usize (input: &Vec<char>) -> Vec<usize> {
+    return input
+    .iter()
+    .map(|c| c.to_digit(10).unwrap()  as usize)
+    .collect();
+}
+
+// vector of u64 to String
+pub fn convert_u64_to_string (input: &Vec<u64>) -> String {
+    return input
+    .iter()
+    .map(|&x| (x as u8 + b'0') as char)
+    .collect::<String>();
+}
+
+// iterates over each u64 and converts them to a usize using map
+pub fn convert_u64_to_usize (input: &Vec<u64>) -> Vec<usize> {
+    return input
+    .iter()
+    .map(|n| *n as usize)
     .collect();
 }
 
@@ -79,8 +101,10 @@ pub fn get_permutation_count (vec: &Vec<char>) -> u64 {
 // this should be used with 4 long integers.
 pub fn contains_repeating_digits (input: &Vec<u64>) -> bool {
     let original_length = input.len();
-    let mut clone = input.clone(); // TODO: figure out why this function does not work without the clone
+    let mut clone = input.clone(); // TODO: figure out why this function does not work without the clone, rust noobie stuff
 
+    // dedup only removes repeating sequential digits, so 
+    // sorting them prior to using dedup yields the desired result
     clone.sort();
     clone.dedup();
 
@@ -92,4 +116,39 @@ pub fn contains_repeating_digits (input: &Vec<u64>) -> bool {
 
 pub fn count_repeating_digits (input: &Vec<u64>) -> u64 {
     todo!();
+}
+
+// heap's algorithm implementation with time complexity of O(n) (fast)
+// directly modifies the value you pass into it, so make a copy prior.
+// partially referenced https://gist.github.com/RichardJohnn/8e6af62e7272cf39e8b6 and https://en.wikipedia.org/wiki/Heap%27s_algorithm
+// k is how many digits you want in your resulting vector, a is our array we pass in, new receieves all data
+
+pub fn heaps (k: usize, a: &mut Vec<u64>) {
+    if k == 1 {
+        print!("{:?} | ", a);
+    }
+    else {
+        for i in 0 .. k - 1 {
+            // Generate permutations with k-th unaltered
+            // Initially k = length(A)
+            heaps(k - 1, a);
+
+            // if k is even
+            if k % 2 == 0 {
+                a.swap(i, k - 1);
+            }
+            // k is odd
+            else {
+                a.swap(0, k - 1);
+            }
+            heaps(k - 1, a);
+        }
+    }
+}
+
+pub fn non_recursive_heaps (k: usize, a: &mut Vec<u64>) {
+    todo!();
+    for i in 0 .. k {
+
+    }
 }

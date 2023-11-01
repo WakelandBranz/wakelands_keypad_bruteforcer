@@ -23,17 +23,22 @@ fn main() {
         };
 
 
-        let numbers = utils::convert_chars_to_u64(&input);
+        let numbers = utils::convert_char_to_u64(&input);
         if debug {println!("Input -> {:?}", &numbers)}
         utils::sleep(500);
             
 
         let combination_count = utils::get_permutation_count(&input);
-        let combinations = bf.get_combos(numbers);
+        bf.get_combos(&numbers);
         
 
         println!("Possible combination count -> {}", combination_count);
-        println!("Combinations -> {:?}", &combinations.unwrap());
+        //println!("Combinations -> {:?}", &combinations);
+
+        // testing
+
+        //let mut new = vec![0, 1, 2, 3];
+       // utils::generate_permutations_mutate(new.len(), &mut new);
     }
 
 }
