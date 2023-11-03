@@ -1,7 +1,10 @@
-mod bruteforce;
+mod utils;
 
 // bring all functions into scope
-use crate::bruteforce::{*, utils::filestream::*};
+use crate::utils::filestream::*;
+
+// TODO: heap's algorithm doesn't seem to work with n < 4 with input length < 3 so
+// figuring out a solution for that would be nice.  I might ask stackoverflow
 
 
 fn main() {
@@ -9,8 +12,6 @@ fn main() {
     let debug: bool = true;
     let completed: bool = false; // function to be implemented in the future
     let path: &'static str = "heap_data.txt";
-    
-    let bf: Bruteforce = Bruteforce::new(debug);
 
     println!("[!] Press ctrl + c to exit at any time");
 
@@ -41,13 +42,15 @@ fn main() {
         if debug {println!("Input -> {:?}", &numbers)}
         utils::sleep(500);
             
+        utils::generate(4, &mut numbers);
 
         let combination_count = utils::get_permutation_count(&input);
-        let combinations = bf.get_combos(&numbers);
+        let combinations = utils::filestream::parse_data_from_file(path);
         
 
         println!("Possible combination count -> {}", combination_count);
-        println!("Combinations -> {:?}", &combinations);
+        if debug {println!("Combinations -> {:?}", &combinations);}
+        utils::print_parsed_data(&combinations);
     }
 
 }

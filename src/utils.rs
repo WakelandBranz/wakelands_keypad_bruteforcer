@@ -83,24 +83,8 @@ pub fn convert_usize_to_string (input: &Vec<usize>) -> String {
         .collect();
 }
 
-// generates the next digit to be compared based on a vector of u64s
-pub fn gen_next (available: &Vec<u64>) -> u64 {
-    let mut rng = rand::thread_rng();
-    return available[rng.gen_range(0..available.len())];
-}
-
-// thanks https://stackoverflow.com/questions/58922609/how-do-i-concatenate-a-vector-of-integers-into-a-single-integer
-pub fn concat(vec: &Vec<u64>) -> u64 {
-    vec.iter().fold(0, |acc, elem| acc * 10 + elem)
-}
-
 pub fn sleep (ms: u64) {
     thread::sleep(time::Duration::from_millis(ms));
-}
-
-// thanks https://stackoverflow.com/questions/59206653/how-to-calculate-21-factorial-in-rust
-pub fn factorial (input: u64) -> u64 {
-    return (1..=input).product();
 }
 
 // thanks https://stackoverflow.com/questions/65561566/number-of-combinations-permutations
@@ -135,35 +119,11 @@ pub fn contains_repeating_digits (input: &Vec<u64>) -> bool {
 // partially referenced https://gist.github.com/RichardJohnn/8e6af62e7272cf39e8b6 and https://en.wikipedia.org/wiki/Heap%27s_algorithm
 // k is how many digits you want in your resulting vector, a is our array we pass in, new receieves all data
 
-// to do, instead of printing just write all data to a file and then concatenate it into a file
-pub fn heaps (k: usize, a: &mut Vec<usize>) {
-    if k == 1 {
-        println!("{:?}", a);
-        filestream::append_file("heap_data.txt", convert_usize_to_string(&a).as_str());
-    }
-    else {
-        for i in 0 .. k - 1 {
-            // Generate permutations with k-th unaltered
-            // Initially k = length(A)
-            heaps(k - 1, a);
-
-            // if k is even
-            if k % 2 == 0 {
-                a.swap(i, k - 1);
-            }
-            // k is odd
-            else {
-                a.swap(0, k - 1);
-            }
-            heaps(k - 1, a);
-        }
-    }
-}
-
-// reference function for heap's
+// currently not functional with size < 4, not sure why...
 pub fn generate(n : usize, a : &mut Vec<usize>) {
     if n == 1 {
-        println!("{:?}", a);
+        //println!("{:?}", a);
+        filestream::append_file("heap_data.txt", convert_usize_to_string(a).as_str());
     }
     else {
         for i in  0 .. n - 1 {
@@ -180,15 +140,8 @@ pub fn generate(n : usize, a : &mut Vec<usize>) {
     }
 }
 
-// wrapper for heap's algorithm.
-pub fn get_permutations (k: usize, a: &Vec<usize>) -> Vec<u64> {
-    let mut a_clone = a.clone();
-    let mut new: Vec<String> = Vec::new();
-
-    heaps(k, &mut a_clone);
-
-    let mut result: Vec<u64> = new.into_iter().map(|x| x.parse().unwrap()).collect();
-    result.sort();
-
-    return result;
+pub fn print_parsed_data (input: &Vec<String>) {
+    for i in 0 .. input.len() {
+        println!("{} -> {}", i + 1, input[i])
+    }
 }
