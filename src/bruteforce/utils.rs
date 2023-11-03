@@ -36,6 +36,13 @@ pub fn get_user_input () -> Option<Vec<char>> {
     return Some(vec);
 }
 
+/*
+ * I apologize in advance for how unnecessary half of these conversion functions
+ * are. I am trying my best to write this in an efficient fashion but honestly
+ * it is a struggle to write this all out by hand.  Its definitely stupid
+ * but it works.
+ */
+
 // iterates over each char and turns it into a u64 using map
 pub fn convert_char_to_u64 (input: &Vec<char>) -> Vec<u64> {
     return input
@@ -67,6 +74,13 @@ pub fn convert_u64_to_usize (input: &Vec<u64>) -> Vec<usize> {
     .iter()
     .map(|n| *n as usize)
     .collect();
+}
+
+pub fn convert_usize_to_string (input: &Vec<usize>) -> String {
+    return input
+        .into_iter()
+        .map(|u| u.to_string())
+        .collect();
 }
 
 // generates the next digit to be compared based on a vector of u64s
@@ -125,7 +139,7 @@ pub fn contains_repeating_digits (input: &Vec<u64>) -> bool {
 pub fn heaps (k: usize, a: &mut Vec<usize>) {
     if k == 1 {
         println!("{:?}", a);
-        filestream::append_file("heap_data", a);
+        filestream::append_file("heap_data.txt", convert_usize_to_string(&a).as_str());
     }
     else {
         for i in 0 .. k - 1 {
@@ -146,6 +160,7 @@ pub fn heaps (k: usize, a: &mut Vec<usize>) {
     }
 }
 
+// reference function for heap's
 pub fn generate(n : usize, a : &mut Vec<usize>) {
     if n == 1 {
         println!("{:?}", a);

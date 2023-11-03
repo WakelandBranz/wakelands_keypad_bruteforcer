@@ -1,24 +1,31 @@
 mod bruteforce;
 
-use crate::bruteforce::*; // Bring Bruteforce into scope
+// bring all functions into scope
+use crate::bruteforce::{*, utils::filestream::*};
 
 
 fn main() {
     // DEBUG VARIABLE
     let debug: bool = true;
     let completed: bool = false; // function to be implemented in the future
-
-    // initialize data storage file for heap's algorithm
-    match utils::filestream::create_file("heap_data") {
-        Ok(_) => if debug {println!("Successfully created heap_data file")},
-        _ => if debug {println!("Failed to create heap_data file")}
-    }
-
+    let path: &'static str = "heap_data.txt";
+    
     let bf: Bruteforce = Bruteforce::new(debug);
 
     println!("[!] Press ctrl + c to exit at any time");
 
     while !completed {
+
+        // reset file and check
+        match reset_file(path) {
+            true => if debug {println!("Successfully reset file")}
+            _ => {
+                if debug {println!("Failed to reset file")}
+                return;
+            }
+        }
+
+
         println!("Please input the digits you have found on the keypad.");
 
         let input: Vec<char> = match utils::get_user_input() {
@@ -41,9 +48,6 @@ fn main() {
 
         println!("Possible combination count -> {}", combination_count);
         println!("Combinations -> {:?}", &combinations);
-
-        // testing
-        utils::generate(numbers.len(), &mut numbers);
     }
 
 }

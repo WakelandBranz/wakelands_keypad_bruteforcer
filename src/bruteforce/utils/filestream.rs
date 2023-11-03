@@ -17,7 +17,7 @@ pub fn append_file (path: &'static str, input_data: &str) -> bool {
 }
 
 pub fn create_file (path: &'static str) -> Result<fs::File, &'static str> {
-    if path_exists(path) {
+    if !path_exists(path) {
         return Ok(fs::File::create(path).unwrap());
     }
     return Err("File already exists");
@@ -32,9 +32,10 @@ pub fn read_file (path: &'static str) -> String {
     return fs::read_to_string(path).unwrap();
 }
 
-// if you create a file with a preexisting path then
-// all data is written over and cleared
-pub fn clear_file (path: &'static str) -> bool {
+// delete file then create the same file
+pub fn reset_file (path: &'static str) -> bool {
+    fs::remove_file(path).expect("File failed to be removed in clear_file");
+
     match create_file(path) {
         Ok(_) => return true,
         _ => return false
