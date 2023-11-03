@@ -9,7 +9,7 @@ use crate::utils::filestream::*;
 
 fn main() {
     // DEBUG VARIABLE
-    let debug: bool = true;
+    let debug: bool = false;
     let completed: bool = false; // function to be implemented in the future
     let path: &'static str = "heap_data.txt";
 
@@ -41,14 +41,11 @@ fn main() {
         let mut numbers = utils::convert_char_to_usize(&input);
         if debug {println!("Input -> {:?}", &numbers)}
         utils::sleep(500);
-            
-        utils::generate(4, &mut numbers);
+        
+        utils::determine_operations(&mut numbers);
 
-        let combination_count = utils::get_permutation_count(&input);
         let combinations = utils::filestream::parse_data_from_file(path);
         
-
-        println!("Possible combination count -> {}", combination_count);
         if debug {println!("Combinations -> {:?}", &combinations);}
         utils::print_parsed_data(&combinations);
     }
