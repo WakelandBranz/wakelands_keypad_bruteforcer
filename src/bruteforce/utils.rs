@@ -1,6 +1,8 @@
 use rand::Rng;
 use std::{thread, time};
 
+pub mod filestream;
+
 // gets user input, returns trimmed user input with length, none is a simple error
 pub fn get_user_input () -> Option<Vec<char>> {
     let mut user_input: String = String::new(); // stores input once acquired in input_size
@@ -114,18 +116,16 @@ pub fn contains_repeating_digits (input: &Vec<u64>) -> bool {
     return true;
 }
 
-pub fn count_repeating_digits (input: &Vec<u64>) -> u64 {
-    todo!();
-}
-
 // heap's algorithm implementation with time complexity of O(n) (fast)
 // directly modifies the value you pass into it, so make a copy prior.
 // partially referenced https://gist.github.com/RichardJohnn/8e6af62e7272cf39e8b6 and https://en.wikipedia.org/wiki/Heap%27s_algorithm
 // k is how many digits you want in your resulting vector, a is our array we pass in, new receieves all data
 
-pub fn heaps (k: usize, a: &mut Vec<u64>) {
+// to do, instead of printing just write all data to a file and then concatenate it into a file
+pub fn heaps (k: usize, a: &mut Vec<usize>) {
     if k == 1 {
-        print!("{:?} | ", a);
+        println!("{:?}", a);
+        filestream::append_file("heap_data", a);
     }
     else {
         for i in 0 .. k - 1 {
@@ -146,9 +146,34 @@ pub fn heaps (k: usize, a: &mut Vec<u64>) {
     }
 }
 
-pub fn non_recursive_heaps (k: usize, a: &mut Vec<u64>) {
-    todo!();
-    for i in 0 .. k {
-
+pub fn generate(n : usize, a : &mut Vec<usize>) {
+    if n == 1 {
+        println!("{:?}", a);
     }
+    else {
+        for i in  0 .. n - 1 {
+            generate(n - 1, a);
+
+            if n % 2 == 0 {
+                a.swap(i, n - 1);
+            }
+            else {
+                a.swap(0, n - 1);
+            }
+        }
+        generate(n - 1, a);
+    }
+}
+
+// wrapper for heap's algorithm.
+pub fn get_permutations (k: usize, a: &Vec<usize>) -> Vec<u64> {
+    let mut a_clone = a.clone();
+    let mut new: Vec<String> = Vec::new();
+
+    heaps(k, &mut a_clone);
+
+    let mut result: Vec<u64> = new.into_iter().map(|x| x.parse().unwrap()).collect();
+    result.sort();
+
+    return result;
 }

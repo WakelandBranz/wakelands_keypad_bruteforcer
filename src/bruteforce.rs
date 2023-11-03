@@ -14,9 +14,9 @@ impl Bruteforce {
     // typically I would make combos an &mut Vec<usize> but I want to 
     // return a new value and not modify it, so there may be a microsecond
     // performance decrease lol
-    pub fn get_combos (&self, combos: &Vec<u64>) {
-        let mut new: Vec<u64> = combos.clone();
-        utils::heaps(combos.len(), &mut new);
+    pub fn get_combos (&self, combos: &Vec<usize>) -> Vec<u64> {
+        let result = utils::get_permutations(combos.len(), &combos);
+        return result;
     }
 
     fn combos_len_4 (&self, combos: Vec<u64>) -> Option<Vec<u64>> {

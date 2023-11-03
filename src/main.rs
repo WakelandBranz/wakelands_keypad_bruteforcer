@@ -2,10 +2,17 @@ mod bruteforce;
 
 use crate::bruteforce::*; // Bring Bruteforce into scope
 
+
 fn main() {
     // DEBUG VARIABLE
     let debug: bool = true;
     let completed: bool = false; // function to be implemented in the future
+
+    // initialize data storage file for heap's algorithm
+    match utils::filestream::create_file("heap_data") {
+        Ok(_) => if debug {println!("Successfully created heap_data file")},
+        _ => if debug {println!("Failed to create heap_data file")}
+    }
 
     let bf: Bruteforce = Bruteforce::new(debug);
 
@@ -23,22 +30,20 @@ fn main() {
         };
 
 
-        let numbers = utils::convert_char_to_u64(&input);
+        let mut numbers = utils::convert_char_to_usize(&input);
         if debug {println!("Input -> {:?}", &numbers)}
         utils::sleep(500);
             
 
         let combination_count = utils::get_permutation_count(&input);
-        bf.get_combos(&numbers);
+        let combinations = bf.get_combos(&numbers);
         
 
         println!("Possible combination count -> {}", combination_count);
-        //println!("Combinations -> {:?}", &combinations);
+        println!("Combinations -> {:?}", &combinations);
 
         // testing
-
-        //let mut new = vec![0, 1, 2, 3];
-       // utils::generate_permutations_mutate(new.len(), &mut new);
+        utils::generate(numbers.len(), &mut numbers);
     }
 
 }
